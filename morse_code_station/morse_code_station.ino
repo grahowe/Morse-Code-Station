@@ -38,7 +38,7 @@ bool newWord;
 
 // Time range of a dot in milliseconds
 const unsigned int dotTimeMillisMin = 20;
-const unsigned int dotTimeMillisMax = 120;
+const unsigned int dotTimeMillisMax = 150;
 
 // Array to store the times of the code button presses (up to 7 dots or dashes, 0-6)
 unsigned long buttonPressTimes[10];

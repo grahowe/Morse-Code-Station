@@ -38,10 +38,10 @@ bool newWord;
 
 // Time range of a dot in milliseconds
 const unsigned int dotTimeMillisMin = 20;
-const unsigned int dotTimeMillisMax = 150;
+const unsigned int dotTimeMillisMax = 120;
 
-// Array to store the times of the code button presses
-unsigned long buttonPressTimes[6];
+// Array to store the times of the code button presses (up to 7 dots or dashes, 0-6)
+unsigned long buttonPressTimes[10];
 int bptIndex;
 
 int row;
@@ -86,8 +86,8 @@ void loop() {
 }
 
 void codeButtonDown() {
-  tone(SPEAKER_PIN, 700); // You can adjust the "sidetone" frequency (e.g., 400 - 1000 Hz) as needed
-  // It is set to 700Hz currently, but can be changed to match your preferred sidetone frequency
+  tone(SPEAKER_PIN, 800); // You can adjust the "sidetone" frequency (e.g., 400 - 1000 Hz) as needed
+  // It is set to 800Hz currently, but can be changed to match your preferred sidetone frequency
   digitalWrite(LED_PIN, HIGH);
   codeTime = millis() - startTime;
 }
@@ -107,9 +107,9 @@ void codeButtonReleased() {
     // Save codeTime
     buttonPressTimes[bptIndex] = codeTime;
     bptIndex++;
-    if( bptIndex == 5 ) {
+    if( bptIndex == 10 ) {
       
-      for(int i=0; i<5; i++) {
+      for(int i=0; i<10; i++) {
         buttonPressTimes[bptIndex] = 0;
       }
     }
@@ -146,13 +146,13 @@ void decodeButtonPresses() {
       Serial.print(" DASH");
   }
   Serial.print("   ");
-  char c = decodeMsg();
+  String c = decodeMsg();
   Serial.print(c);
   Serial.println();
-  display.write(c);
+  display.write(c.c_str());
   display.display();
   bptIndex = 0;
-  for(int i=0; i<5; i++) {
+  for(int i=0; i<10; i++) {
     buttonPressTimes[i] = 0;
   }
 }
@@ -168,12 +168,17 @@ bool isDash(unsigned long t) {
   return false;
 }
 
-void drawChar(char c) {
-  display.write(c);
+void drawChar(String c) {
+  display.write(c.c_str());
   display.display();
 }
-char decodeMsg() {
-  char c = '>';
+
+//Library of characters - Includes alphabet, numerical characters, and CW prosigns
+String decodeMsg() {
+  //Initial character or unknown character
+  String c = ">";
+
+  //Alphabetic Characters
   if( isDot(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && buttonPressTimes[2] == 0 )
     c = 'A';
   else if( isDash(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && buttonPressTimes[4]== 0 )
@@ -226,6 +231,8 @@ char decodeMsg() {
     c = 'Y';
   else if( isDash(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && buttonPressTimes[4]== 0 )
     c = 'Z';
+
+  //Numerical characters
   else if( isDot(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]))
     c = '1';
   else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]))
@@ -246,5 +253,27 @@ char decodeMsg() {
     c = '9';
   else if( isDash(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]))
     c = '0';
+
+  //Prosign Characters - Used in Amateur CW conversations
+  else if( isDot(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
+    c = "<AR>"; //End of message prosign
+  else if( isDot(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
+    c = "<AS>"; //Stand by prosign
+  else if( isDash(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDash(buttonPressTimes[4]) && isDot(buttonPressTimes[5]) && isDash(buttonPressTimes[6]) && buttonPressTimes[7] == 0)
+    c = "<BK>"; //Break message, invite receiving station to TX
+  else if( isDash(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDash(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
+    c = "<BT>"; //Pause, break for text
+  else if( isDash(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDash(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
+    c = "<KA>"; //Beginning of message
+  else if( isDash(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
+    c = "<KN>"; //End of transmission
+  else if( isDash(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && isDash(buttonPressTimes[5]) && isDot(buttonPressTimes[6]) && isDot(buttonPressTimes[7]) && buttonPressTimes[8] == 0)
+    c = "<CL>"; //Frequency clear prosign
+  else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && isDash(buttonPressTimes[5]) && buttonPressTimes[6] == 0)
+    c = "<SK>"; //Silent Key, end of contact
+  else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
+    c = "<VE>"; //Copy, 10-4, verified, etc.
+
+  //Add some more Morse characters if you feel like it!
   return c;
 }

@@ -176,7 +176,7 @@ void drawChar(String c) {
 //Library of characters - Includes alphabet, numerical characters, and CW prosigns
 String decodeMsg() {
   //Initial character or unknown character
-  String c = ">";
+  String c = "_";
 
   //Alphabetic Characters
   if( isDot(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && buttonPressTimes[2] == 0 )

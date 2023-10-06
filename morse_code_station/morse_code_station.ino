@@ -75,18 +75,6 @@ void setup() {
   delay(100);
 }
 
-/*void loop() {
-  scanButtons();
-  if( millis() - lastButtonPressTime > 1600 && newWord == true ) {
-    Serial.println("New word");
-    display.write(' ');
-    display.display();
-    newWord = false;
-  }else if( millis() - lastButtonPressTime > 600 && letterDecoded == false) {
-    decodeButtonPresses();
-    letterDecoded = true;
-  }
-}*/
 void loop() {
   scanButtons();
 
@@ -173,27 +161,6 @@ void scanButtons() {
     codeButtonArmed = false;
   }
 }
-
-/*void scanButtons() {
-  if(! codeButtonArmed && digitalRead(CODE_BUTTON) == HIGH) {
-    codeButtonArmed = true;
-    // start timer
-    startTime = millis();
-    lastButtonPressTime = startTime;
-    codeTime = 0;
-    letterDecoded = false;
-    newWord = true;
-  }
-  if( digitalRead(CODE_BUTTON) == HIGH ) {
-    codeButtonPressed = true;
-    codeButtonDown();
-  }
-  if( codeButtonPressed && digitalRead(CODE_BUTTON) == LOW ) {
-    codeButtonPressed = false;
-    codeButtonReleased();
-    codeButtonArmed = false;
-  }
-}*/
 
 void decodeButtonPresses() {
   Serial.print("DECODE LETTER: ");

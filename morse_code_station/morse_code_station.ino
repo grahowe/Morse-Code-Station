@@ -36,6 +36,9 @@ unsigned long lastButtonPressTime;
 bool letterDecoded;
 bool newWord;
 
+unsigned long lastActivityTime;
+const unsigned long inactivityTimeout = 30000; // 30 seconds in milliseconds
+
 // Time range of a dot in milliseconds
 const unsigned int dotTimeMillisMin = 20;
 const unsigned int dotTimeMillisMax = 150;
@@ -72,7 +75,7 @@ void setup() {
   delay(100);
 }
 
-void loop() {
+/*void loop() {
   scanButtons();
   if( millis() - lastButtonPressTime > 1600 && newWord == true ) {
     Serial.println("New word");
@@ -83,6 +86,37 @@ void loop() {
     decodeButtonPresses();
     letterDecoded = true;
   }
+}*/
+void loop() {
+  scanButtons();
+
+  unsigned long elapsedTime = millis() - lastActivityTime;
+  if (elapsedTime > inactivityTimeout) {
+    // Clear the display and draw the header after 30 seconds of inactivity
+    display.clearDisplay();
+    drawHeader();
+    display.display();
+  } else {
+    if (millis() - lastButtonPressTime > 1600 && newWord == true) {
+      Serial.println("New word");
+      display.write(' ');
+      display.display();
+      newWord = false;
+    } else if (millis() - lastButtonPressTime > 600 && letterDecoded == false) {
+      decodeButtonPresses();
+      letterDecoded = true;
+    }
+  }
+}
+
+void drawHeader() {
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.cp437(true);
+  display.write("Morse Code Station");
+  display.drawLine(0, 10, display.width(), 10, SSD1306_WHITE);
+  display.setCursor(0, 12);
 }
 
 void codeButtonDown() {
@@ -117,6 +151,30 @@ void codeButtonReleased() {
 }
 
 void scanButtons() {
+  if (!codeButtonArmed && digitalRead(CODE_BUTTON) == HIGH) {
+    codeButtonArmed = true;
+    // start timer
+    startTime = millis();
+    lastButtonPressTime = startTime;
+    codeTime = 0;
+    letterDecoded = false;
+    newWord = true;
+  }
+
+  if (digitalRead(CODE_BUTTON) == HIGH) {
+    codeButtonPressed = true;
+    codeButtonDown();
+    lastActivityTime = millis(); // Update the last activity time
+  }
+
+  if (codeButtonPressed && digitalRead(CODE_BUTTON) == LOW) {
+    codeButtonPressed = false;
+    codeButtonReleased();
+    codeButtonArmed = false;
+  }
+}
+
+/*void scanButtons() {
   if(! codeButtonArmed && digitalRead(CODE_BUTTON) == HIGH) {
     codeButtonArmed = true;
     // start timer
@@ -135,7 +193,7 @@ void scanButtons() {
     codeButtonReleased();
     codeButtonArmed = false;
   }
-}
+}*/
 
 void decodeButtonPresses() {
   Serial.print("DECODE LETTER: ");

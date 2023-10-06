@@ -233,23 +233,23 @@ String decodeMsg() {
     c = 'Z';
 
   //Numerical characters
-  else if( isDot(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]))
+  else if( isDot(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '1';
-  else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]))
+  else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '2';
-  else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]))
+  else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '3';
-  else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDash(buttonPressTimes[4]))
+  else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDash(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '4';
   else if( isDot(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '5';
-  else if( isDash(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDot(buttonPressTimes[4]))
+  else if( isDash(buttonPressTimes[0]) && isDot(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '6';
-  else if( isDash(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDot(buttonPressTimes[4]))
+  else if( isDash(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDot(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '7';
-  else if( isDash(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDot(buttonPressTimes[4]))
+  else if( isDash(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDot(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '8';
-  else if( isDash(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDot(buttonPressTimes[4]))
+  else if( isDash(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDot(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '9';
   else if( isDash(buttonPressTimes[0]) && isDash(buttonPressTimes[1]) && isDash(buttonPressTimes[2]) && isDash(buttonPressTimes[3]) && isDash(buttonPressTimes[4]) && buttonPressTimes[5] == 0)
     c = '0';

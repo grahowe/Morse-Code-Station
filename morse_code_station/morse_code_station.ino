@@ -37,7 +37,7 @@ bool letterDecoded;
 bool newWord;
 
 unsigned long lastActivityTime;
-const unsigned long inactivityTimeout = 30000; // 30 seconds in milliseconds
+const unsigned long inactivityTimeout = 10000; // 10 seconds in milliseconds
 
 // Time range of a dot in milliseconds
 const unsigned int dotTimeMillisMin = 20;
